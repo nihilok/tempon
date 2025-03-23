@@ -14,20 +14,18 @@ interface Data {
   humidity: number;
 }
 
-interface ColourMap {
-  [key: string]: MinMax;
-}
+type ColourMap = Record<keyof Data, MinMax>;
 
-const UPDATE_INTERVAL = 3000;
+const UPDATE_INTERVAL = 10000; // 10 seconds
 
 const COLOUR_MAP: ColourMap = {
   pressure: { min: 950, max: 1050 },
-  temp: { min: 14, max: 26 },
+  temperature: { min: 14, max: 26 },
   humidity: { min: 50, max: 90 },
 };
 
 function calculateColour(
-  valueType: string,
+  valueType: keyof Data,
   value: number,
   colourMap: ColourMap,
 ) {
@@ -57,20 +55,26 @@ function App() {
   }
 
   function updateColours(data: Data) {
-    setPressureColour(calculateColour("pressure", data.pressure, COLOUR_MAP));
-    setTemperatureColour(calculateColour("temp", data.temperature, COLOUR_MAP));
-    setHumidityColour(calculateColour("humidity", data.humidity, COLOUR_MAP));
+    const { pressure, temperature: temp, humidity } = data;
+
+    setPressureColour(calculateColour("pressure", pressure, COLOUR_MAP));
+    setTemperatureColour(calculateColour("temperature", temp, COLOUR_MAP));
+    setHumidityColour(calculateColour("humidity", humidity, COLOUR_MAP));
 
     return data;
   }
 
   useEffect(() => {
     const update = () => fetchData().then(updateColours).then(setApiResponse);
+
     const doUpdate = () => {
       update().catch(console.error);
     };
+
     doUpdate();
+
     const interval = setInterval(doUpdate, UPDATE_INTERVAL);
+
     return () => clearInterval(interval);
   }, []);
 
