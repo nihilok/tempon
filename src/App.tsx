@@ -54,6 +54,7 @@ function App() {
   const [pressureColour, setPressureColour] = useState<Colour>("default");
   const [temperatureColour, setTemperatureColour] = useState<Colour>("default");
   const [humidityColour, setHumidityColour] = useState<Colour>("default");
+  const [showCamera, setShowCamera] = useState(false);
 
   async function fetchData() {
     const url = API_URL + "data/";
@@ -88,7 +89,7 @@ function App() {
   return (
     <>
       {__DEV__ && <span>HELLO, DEV!</span>}
-      <h1>DATA:</h1>
+      <h1>Plants:</h1>
       {!apiResponse && <LoadingSpinner className={"text-grey"} />}
       {apiResponse && (
         <div className="data">
@@ -112,7 +113,17 @@ function App() {
           </p>
         </div>
       )}
-      <Player src="/vid.jpeg" />
+      <div style={{ marginTop: "3rem" }} />
+      {!showCamera && (
+        <button onClick={() => setShowCamera(true)}>Camera</button>
+      )}
+      {showCamera && (
+        <>
+          <h1>Camera:</h1>
+          <Player src="/vid.jpeg" />
+          <button onClick={() => setShowCamera(false)}>Close</button>
+        </>
+      )}
     </>
   );
 }
