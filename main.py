@@ -13,7 +13,6 @@ from starlette.responses import RedirectResponse
 STATIC_FILES_PATH = Path(os.path.dirname(os.path.abspath(__file__))) / "dist"
 
 DATA_URL = os.environ["DATA_URL"]
-VIDEO_IP = os.getenv("VIDEO_IP")
 
 
 async def not_found_response(request: Request, exception: HTTPException):

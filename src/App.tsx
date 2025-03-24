@@ -112,7 +112,7 @@ function App() {
           </p>
         </div>
       )}
-      {__DEV__ && <Player src="/vid.jpeg" />}
+      <Player src="/vid.jpeg" />
     </>
   );
 }
