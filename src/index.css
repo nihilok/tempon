@@ -16,6 +16,7 @@
   --color-green: #52c41a;
   --color-blue: #1677ff;
   --color-yellow: #faad14;
+  --color-grey: #414141;
 }
 
 a {
@@ -88,8 +89,18 @@ button:focus-visible {
   color: var(--color-yellow);
 }
 
+.text-grey {
+  color: var(--color-grey);
+}
+
 @media screen and (width <= 600px) {
   :root {
     font-size: 1.5rem;
+  }
+}
+
+@media screen and (width <= 400px) {
+  :root {
+    font-size: 1rem;
   }
 }

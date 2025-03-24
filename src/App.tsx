@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner.tsx";
+import { Player } from "./components/VideoPlayer/Player.tsx";
 
 type Colour = "default" | "red" | "green" | "blue";
 
@@ -42,7 +44,11 @@ function calculateColour(
   return colour;
 }
 
+const __DEV__ = import.meta.env.MODE === "development";
+
 function App() {
+  const API_URL = __DEV__ ? "http://localhost:8000/api/v3/" : "/api/v3/";
+
   const [apiResponse, setApiResponse] = useState<Data>();
 
   const [pressureColour, setPressureColour] = useState<Colour>("default");
@@ -50,7 +56,8 @@ function App() {
   const [humidityColour, setHumidityColour] = useState<Colour>("default");
 
   async function fetchData() {
-    const response = await fetch("/api/v3/data/");
+    const url = API_URL + "data/";
+    const response = await fetch(url);
     return await response.json();
   }
 
@@ -80,7 +87,9 @@ function App() {
 
   return (
     <>
+      {__DEV__ && <span>HELLO, DEV!</span>}
       <h1>DATA:</h1>
+      {!apiResponse && <LoadingSpinner className={"text-grey"} />}
       {apiResponse && (
         <div className="data">
           <p className="data-row">
@@ -103,6 +112,7 @@ function App() {
           </p>
         </div>
       )}
+      {__DEV__ && <Player src="/vid.jpeg" />}
     </>
   );
 }

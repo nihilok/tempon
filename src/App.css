@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+.data {
+  max-width: max-content;
+  margin: 0 auto;
+}
+
 .data-row {
   display: flex;
   justify-content: space-between;

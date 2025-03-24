@@ -1,17 +1,23 @@
+import asyncio
 import os
+import sys
 from pathlib import Path
 
 import aiohttp
+import requests
 import uvicorn
 
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from starlette.responses import RedirectResponse
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import RedirectResponse, StreamingResponse
+from fast_auth import fast_auth
 
 STATIC_FILES_PATH = Path(os.path.dirname(os.path.abspath(__file__))) / "dist"
 
 DATA_URL = os.environ["DATA_URL"]
+VIDEO_IP = os.getenv("VIDEO_IP")
 
 
 async def not_found_response(request: Request, exception: HTTPException):
@@ -35,6 +41,17 @@ exceptions = {
 }
 app = FastAPI(exception_handlers=exceptions)
 
+def set_cors_origins(a: FastAPI):
+    a.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+set_cors_origins(app)
+
 # Create API router
 api_router = APIRouter(prefix="/api/v3")
 
@@ -46,6 +63,23 @@ async def get_data():
                 raise HTTPException(status_code=response.status, detail="Error fetching data")
             data = await response.json()
             return data
+
+@api_router.get("/video/")
+async def proxy_video():
+    if not VIDEO_IP:
+        raise HTTPException(status_code=404, detail="Video feed not found")
+    video_feed_url = f"http://{VIDEO_IP}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(video_feed_url) as resp:
+            if resp.status != 200:
+                raise HTTPException(status_code=resp.status, detail="Error fetching video feed")
+
+            async def generate():
+                async for chunk in resp.content.iter_any():
+                    yield chunk
+
+            return StreamingResponse(generate(), headers=resp.headers)
 
 # Include the API router
 app.include_router(api_router)
