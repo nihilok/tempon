@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner.tsx";
 import { Player } from "./components/VideoPlayer/Player.tsx";
+import {
+  GaugeHumidity,
+  GaugePressure,
+  GaugeTemperature,
+} from "./components/Gauges/Guages.tsx";
 
 type Colour = "default" | "red" | "green" | "blue";
 
@@ -22,7 +27,7 @@ const UPDATE_INTERVAL = 10000; // 10 seconds
 
 const COLOUR_MAP: ColourMap = {
   pressure: { min: 950, max: 1050 },
-  temperature: { min: 14, max: 26 },
+  temperature: { min: 15, max: 26 },
   humidity: { min: 50, max: 90 },
 };
 
@@ -95,24 +100,37 @@ function App() {
         <div className="data">
           <p className="data-row">
             <span>Pressure: </span>
-            <span className={`text-${pressureColour}`}>
-              {apiResponse.pressure.toFixed(0)} hPa
-            </span>
+
+            <GaugePressure
+              value={apiResponse.pressure}
+              className={`text-${pressureColour}`}
+              arcColor={"#f15555"}
+              restColor={"#03b2ad"}
+            />
           </p>
           <p className="data-row">
             <span>Temperature: </span>
-            <span className={`text-${temperatureColour}`}>
-              {apiResponse.temperature.toFixed(1)} °C
-            </span>
+
+            <GaugeTemperature
+              value={apiResponse.temperature}
+              className={`text-${temperatureColour}`}
+              arcColor={"#f15555"}
+              restColor={"#036fb2"}
+            />
           </p>
           <p className="data-row">
             <span>Humidity: </span>
-            <span className={`text-${humidityColour}`}>
-              {apiResponse.humidity.toFixed(0)} %
-            </span>
+
+            <GaugeHumidity
+              value={apiResponse.humidity}
+              className={`text-${humidityColour}`}
+              arcColor={"#03b2ad"}
+              restColor={"#f15555"}
+            />
           </p>
         </div>
       )}
+
       <div style={{ marginTop: "3rem" }} />
       {!showCamera && (
         <button onClick={() => setShowCamera(true)}>Camera</button>

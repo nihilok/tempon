@@ -8,11 +8,56 @@
 .data {
   max-width: max-content;
   margin: 0 auto;
+  display: flex;
+  font-size: 0.8em;
 }
 
 .data-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 0.5em 0;
-  gap: 1em;
+}
+
+.data-row span {
+  margin-bottom: -1.25em;
+}
+
+.MuiGauge-root {
+  --text-color: #208bb2;
+  fill: var(--text-color);
+}
+
+.MuiGauge-root:hover {
+  --text-color: #2e8b57;
+}
+
+.MuiGauge-root .MuiGauge-valueText text {
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+}
+
+.MuiGauge-root.text-red .MuiGauge-valueText text {
+  --text-color: var(--color-red);
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+}
+
+.MuiGauge-root.text-red :hover {
+  --text-color: var(--color-red);
+}
+
+.MuiGauge-root.text-blue .MuiGauge-valueText text {
+  --text-color: var(--color-blue);
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+}
+
+.MuiGauge-root.text-blue :hover {
+  --text-color: var(--color-blue);
+}
+
+@media screen and (width <= 365px) {
+  .data {
+    flex-direction: column;
+  }
 }
