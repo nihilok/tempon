@@ -50,7 +50,7 @@ function GaugeBase({
 }
 
 export function GaugePressure({ value, ...gaugeProps }: GaugeProps) {
-  return <GaugeBase value={value} min={900} max={1100} {...gaugeProps} />;
+  return <GaugeBase value={value} min={950} max={1050} {...gaugeProps} />;
 }
 
 export function GaugeTemperature({ value, ...gaugeProps }: GaugeProps) {

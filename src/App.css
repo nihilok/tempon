@@ -23,17 +23,19 @@
 }
 
 .MuiGauge-root {
-  --text-color: #208bb2;
+  --box-shadow: none;
   fill: var(--text-color);
 }
 
 .MuiGauge-root:hover {
-  --text-color: #2e8b57;
+  --box-shadow: drop-shadow(2px 2px 5px rgba(152, 20, 20, 0.5));
 }
 
 .MuiGauge-root .MuiGauge-valueText text {
   color: var(--text-color) !important;
   fill: var(--text-color) !important;
+  box-shadow: var(--box-shadow);
+  filter: var(--box-shadow);
 }
 
 .MuiGauge-root.text-red .MuiGauge-valueText text {
