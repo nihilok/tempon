@@ -104,7 +104,7 @@ function App() {
             <GaugePressure
               value={apiResponse.pressure}
               className={`text-${pressureColour}`}
-              arcColor={"#f15555"}
+              arcColor={"#036fb2"}
               restColor={"#03b2ad"}
             />
           </p>
