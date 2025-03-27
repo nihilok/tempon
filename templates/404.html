@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found</title>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        background-color: #1a1a2e;
+        color: #f8f8f8;
+        text-align: center;
+        padding: 50px;
+        margin: 0;
+        overflow: hidden;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+      }
+      h1 {
+        font-size: 72px;
+        margin-bottom: 20px;
+        color: #4d79ff;
+        text-shadow: 0 0 10px rgba(77, 121, 255, 0.7);
+      }
+      p {
+        font-size: 24px;
+        margin-bottom: 30px;
+      }
+      .missing {
+        font-size: 120px;
+        margin: 30px 0;
+        position: relative;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .magnify {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        font-size: 60px;
+        transform: rotate(20deg);
+        animation: search 2s ease-in-out infinite;
+      }
+      @keyframes search {
+        0% {
+          transform: rotate(20deg) scale(1);
+        }
+        50% {
+          transform: rotate(30deg) scale(1.1);
+        }
+        100% {
+          transform: rotate(20deg) scale(1);
+        }
+      }
+      .reload {
+        background: #4d79ff;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Courier New", monospace;
+        margin-top: 20px;
+      }
+      .reload:hover {
+        background: #3a5bbf;
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(77, 121, 255, 0.5);
+      }
+      .home-btn {
+        background: #16213e;
+        color: white;
+        border: 2px solid #4d79ff;
+        padding: 15px 30px;
+        font-size: 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Courier New", monospace;
+        margin-top: 20px;
+        margin-left: 10px;
+      }
+      .home-btn:hover {
+        background: #4d79ff;
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(77, 121, 255, 0.5);
+      }
+      .bits {
+        position: absolute;
+        color: #4d79ff;
+        opacity: 0.5;
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 18px;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-100vh);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+      .error-code {
+        font-family: monospace;
+        font-size: 32px;
+        color: #4d79ff;
+        margin: 20px 0;
+        letter-spacing: 5px;
+      }
+      .question-marks {
+        position: absolute;
+        font-size: 24px;
+        color: #4d79ff;
+        opacity: 0;
+        animation: fadeInOut 2s ease-in-out infinite;
+      }
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-15px);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>LOST IN SPACE</h1>
+      <div class="error-code">ERROR 404</div>
+      <p>The page you're looking for has vanished into the digital void!</p>
+
+      <div class="missing">
+        📂
+        <div class="magnify">🔍</div>
+        <div class="question-marks" style="top: -10px; left: 20px">❓</div>
+        <div
+          class="question-marks"
+          style="top: -10px; right: 20px; animation-delay: 0.5s"
+        >
+          ❓
+        </div>
+        <div
+          class="question-marks"
+          style="top: -30px; left: 50%; animation-delay: 1s"
+        >
+          ❓
+        </div>
+      </div>
+
+      <p>
+        Our code astronauts have searched everywhere but couldn't find what
+        you're looking for.
+      </p>
+
+      <div>
+        <button class="reload" onclick="location.reload()">Try Again</button>
+        <button class="home-btn" onclick="window.location.href='/'">
+          Go Home
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Create falling binary bits in the background
+      function createBits() {
+        const body = document.querySelector("body");
+        const characters = ["0", "1", "4", "0", "4"];
+
+        for (let i = 0; i < 40; i++) {
+          const bit = document.createElement("div");
+          bit.className = "bits";
+          bit.textContent =
+            characters[Math.floor(Math.random() * characters.length)];
+
+          // Random positions and speeds
+          const left = Math.random() * 100;
+          const delay = Math.random() * 5;
+          const duration = 5 + Math.random() * 10;
+
+          bit.style.left = `${left}%`;
+          bit.style.animationDelay = `${delay}s`;
+          bit.style.animationDuration = `${duration}s`;
+
+          body.appendChild(bit);
+        }
+      }
+
+      // Start the animation
+      document.addEventListener("DOMContentLoaded", createBits);
+
+      // Add fun console message
+      setTimeout(() => {
+        console.error(
+          "404: Page not found! But don't panic, it's just hiding.",
+        );
+      }, 1000);
+    </script>
+  </body>
+</html>

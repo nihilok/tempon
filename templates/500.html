@@ -1,0 +1,163 @@
+async def internal_server_error_response(request: Request, exception:
+HTTPException): html_content = """
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>500 - Server Meltdown</title>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        background-color: #1e1e1e;
+        color: #f8f8f8;
+        text-align: center;
+        padding: 50px;
+        margin: 0;
+        overflow: hidden;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+      }
+      h1 {
+        font-size: 72px;
+        margin-bottom: 20px;
+        color: #ff6b6b;
+        text-shadow: 0 0 10px rgba(255, 107, 107, 0.7);
+      }
+      p {
+        font-size: 24px;
+        margin-bottom: 30px;
+      }
+      .server {
+        font-size: 120px;
+        margin: 30px 0;
+        position: relative;
+        display: inline-block;
+      }
+      .flames {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 60px;
+        color: #ff6b6b;
+        animation: burn 0.5s infinite alternate;
+      }
+      @keyframes burn {
+        0% {
+          text-shadow:
+            0 0 20px #ff6b6b,
+            0 0 30px #ff9d6b,
+            0 0 40px #ffbc6b;
+          transform: translateX(-50%) translateY(0) scale(1);
+        }
+        100% {
+          text-shadow:
+            0 0 30px #ff6b6b,
+            0 0 40px #ff9d6b,
+            0 0 50px #ffbc6b;
+          transform: translateX(-50%) translateY(-5px) scale(1.1);
+        }
+      }
+      .reload {
+        background: #4a8fed;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Courier New", monospace;
+        margin-top: 20px;
+      }
+      .reload:hover {
+        background: #2a6fcf;
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(74, 143, 237, 0.5);
+      }
+      .bits {
+        position: absolute;
+        color: #4a8fed;
+        opacity: 0.7;
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 18px;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-100vh);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+      .error-code {
+        font-family: monospace;
+        font-size: 32px;
+        color: #ff6b6b;
+        margin: 20px 0;
+        letter-spacing: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>OOPS!</h1>
+      <div class="error-code">ERROR 500</div>
+      <p>Our server is having a meltdown!</p>
+
+      <div class="server">
+        🖥️
+        <div class="flames">🔥</div>
+      </div>
+
+      <p>
+        Our team of panic-stricken developers has been alerted and is probably
+        spilling coffee right now.
+      </p>
+
+      <button class="reload" onclick="location.reload()">Try Again</button>
+    </div>
+
+    <script>
+      // Create falling binary bits in the background
+      function createBits() {
+        const body = document.querySelector("body");
+        const characters = ["0", "1"];
+
+        for (let i = 0; i < 40; i++) {
+          const bit = document.createElement("div");
+          bit.className = "bits";
+          bit.textContent =
+            characters[Math.floor(Math.random() * characters.length)];
+
+          // Random positions and speeds
+          const left = Math.random() * 100;
+          const delay = Math.random() * 5;
+          const duration = 5 + Math.random() * 10;
+
+          bit.style.left = `${left}%`;
+          bit.style.animationDelay = `${delay}s`;
+          bit.style.animationDuration = `${duration}s`;
+
+          body.appendChild(bit);
+        }
+      }
+
+      // Start the animation
+      document.addEventListener("DOMContentLoaded", createBits);
+
+      // Add dramatic effect
+      setTimeout(() => {
+        console.error("SYSTEM FAILURE! (Just kidding, it's just a 500 error)");
+      }, 1000);
+    </script>
+  </body>
+</html>
+""" return HTMLResponse(content=html_content, status_code=500)

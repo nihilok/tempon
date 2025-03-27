@@ -11,6 +11,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 
 STATIC_FILES_PATH = Path(os.path.dirname(os.path.abspath(__file__))) / "dist"
+TEMPLATES_PATH = Path(os.path.dirname(os.path.abspath(__file__))) / "templates"
 
 DATA_URL = os.environ["DATA_URL"]
 
@@ -25,10 +26,10 @@ async def not_found_response(request: Request, exception: HTTPException):
         return RedirectResponse(f"{path}/", status_code=301)
 
     # Otherwise, return 404 page
-    return FileResponse(STATIC_FILES_PATH / "404.html", status_code=404)
+    return FileResponse(TEMPLATES_PATH / "404.html", status_code=404)
 
 async def internal_server_error_response(request: Request, exception: HTTPException):
-    return FileResponse(STATIC_FILES_PATH / "500.html", status_code=500)
+    return FileResponse(TEMPLATES_PATH / "500.html", status_code=500)
 
 exceptions = {
     404: not_found_response,
