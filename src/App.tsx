@@ -96,7 +96,6 @@ function App() {
       {!apiResponse && <LoadingSpinner className={"text-grey"} />}
       {apiResponse && (
         <div className="data">
-          {/* Your existing gauge components */}
           <p className="data-row">
             <span>Pressure: </span>
             <GaugePressure
@@ -110,7 +109,7 @@ function App() {
             <span>Temperature: </span>
 
             <GaugeTemperature
-              value={apiResponse.temperature}
+              value={parseFloat(apiResponse.temperature.toFixed(1))}
               className={`text-${temperatureColour}`}
               arcColor={"#f15555"}
               restColor={"#036fb2"}
@@ -120,7 +119,7 @@ function App() {
             <span>Humidity: </span>
 
             <GaugeHumidity
-              value={apiResponse.humidity}
+              value={parseInt(apiResponse.humidity.toFixed(0))}
               className={`text-${humidityColour}`}
               arcColor={"#03b2ad"}
               restColor={"#f15555"}
