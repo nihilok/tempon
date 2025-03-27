@@ -9,6 +9,7 @@ interface GaugeProps {
   className?: string;
   arcColor?: string;
   restColor?: string;
+  text?: () => string;
 }
 
 function GaugeBase({
@@ -20,6 +21,7 @@ function GaugeBase({
   className,
   arcColor,
   restColor,
+  ...gaugeProps
 }: GaugeProps) {
   const flag = ![min, max].includes(undefined)
     ? value < (min as number) + 10 || value > (max as number) - 10
@@ -28,6 +30,7 @@ function GaugeBase({
     <Gauge
       startAngle={-100}
       endAngle={100}
+      {...gaugeProps}
       height={height}
       width={width}
       value={value}
@@ -39,7 +42,7 @@ function GaugeBase({
           fontSize: 10,
         },
         [`& .${gaugeClasses.valueArc}`]: {
-          fill: arcColor ? arcColor : flag ? "firebrick" : "#52b202",
+          fill: arcColor ? arcColor : flag ? "#b23702" : "#52b202",
         },
         [`& .${gaugeClasses.referenceArc}`]: {
           fill: restColor || theme.palette.text.disabled,
@@ -50,13 +53,37 @@ function GaugeBase({
 }
 
 export function GaugePressure({ value, ...gaugeProps }: GaugeProps) {
-  return <GaugeBase value={value} min={950} max={1050} {...gaugeProps} />;
+  return (
+    <GaugeBase
+      value={value}
+      min={950}
+      max={1050}
+      text={() => `${value} hPa`}
+      {...gaugeProps}
+    />
+  );
 }
 
 export function GaugeTemperature({ value, ...gaugeProps }: GaugeProps) {
-  return <GaugeBase value={value} min={0} max={50} {...gaugeProps} />;
+  return (
+    <GaugeBase
+      value={value}
+      min={0}
+      max={50}
+      text={() => `${value} °C`}
+      {...gaugeProps}
+    />
+  );
 }
 
 export function GaugeHumidity({ value, ...gaugeProps }: GaugeProps) {
-  return <GaugeBase value={value} min={0} max={100} {...gaugeProps} />;
+  return (
+    <GaugeBase
+      value={value}
+      min={0}
+      max={100}
+      text={() => `${value} %`}
+      {...gaugeProps}
+    />
+  );
 }

@@ -7,6 +7,7 @@ import {
   GaugePressure,
   GaugeTemperature,
 } from "./components/Gauges/Guages.tsx";
+import { TabLayout } from "./components/Tabs/TabLayout.tsx";
 
 type Colour = "default" | "red" | "green" | "blue";
 
@@ -59,7 +60,6 @@ function App() {
   const [pressureColour, setPressureColour] = useState<Colour>("default");
   const [temperatureColour, setTemperatureColour] = useState<Colour>("default");
   const [humidityColour, setHumidityColour] = useState<Colour>("default");
-  const [showCamera, setShowCamera] = useState(false);
 
   async function fetchData() {
     const url = API_URL + "data/";
@@ -91,18 +91,16 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  return (
+  const SensorsContent = (
     <>
-      {__DEV__ && <span>HELLO, DEV!</span>}
-      <h1>Plants:</h1>
       {!apiResponse && <LoadingSpinner className={"text-grey"} />}
       {apiResponse && (
         <div className="data">
+          {/* Your existing gauge components */}
           <p className="data-row">
             <span>Pressure: </span>
-
             <GaugePressure
-              value={apiResponse.pressure}
+              value={parseInt(apiResponse.pressure.toFixed(0))}
               className={`text-${pressureColour}`}
               arcColor={"#036fb2"}
               restColor={"#03b2ad"}
@@ -130,18 +128,24 @@ function App() {
           </p>
         </div>
       )}
+    </>
+  );
 
-      <div style={{ marginTop: "3rem" }} />
-      {!showCamera && (
-        <button onClick={() => setShowCamera(true)}>Camera</button>
-      )}
-      {showCamera && (
-        <>
-          <h1>Camera:</h1>
-          <Player src="/vid.jpeg" />
-          <button onClick={() => setShowCamera(false)}>Close</button>
-        </>
-      )}
+  const CameraContent = (
+    <>
+      <Player src="/vid.jpeg" />
+    </>
+  );
+
+  return (
+    <>
+      {__DEV__ && <span>HELLO, DEV!</span>}
+      <TabLayout>
+        {{
+          sensors: SensorsContent,
+          camera: CameraContent,
+        }}
+      </TabLayout>
     </>
   );
 }
