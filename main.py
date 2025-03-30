@@ -15,7 +15,7 @@ TEMPLATES_PATH = Path(os.path.dirname(os.path.abspath(__file__))) / "templates"
 
 DATA_URL = os.environ["DATA_URL"]
 
-TEMPERATURE_OFFSET = os.environ.get("TEMPERATURE_OFFSET", 0.0)
+TEMPERATURE_OFFSET = float(os.environ.get("TEMPERATURE_OFFSET", 0.0))
 
 async def not_found_response(request: Request, exception: HTTPException):
     # Only serve index.html for non-API routes
