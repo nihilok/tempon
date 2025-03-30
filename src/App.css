@@ -58,7 +58,7 @@
   --text-color: var(--color-blue);
 }
 
-@media screen and (width <= 365px) {
+@media screen and (width <= 500px) {
   .data {
     flex-direction: column;
   }

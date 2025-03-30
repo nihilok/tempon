@@ -61,6 +61,14 @@ function calculateColour(
 
 const __DEV__ = import.meta.env.MODE === "development";
 
+const LARGE_SCREEN_BREAKPOINT = 960;
+
+const SMALL_SCREEN_BREAKPOINT = 500;
+
+const MAX_GAUGE_WIDTH = 300;
+
+const MAX_GAUGE_HEIGHT = 200;
+
 function App() {
   const API_URL = __DEV__ ? "http://localhost:8000/api/v3/" : "/api/v3/";
 
@@ -103,22 +111,22 @@ function App() {
   const screenSize = useScreenSize();
 
   const getGuageWidth = useCallback(() => {
-    if (screenSize.width < 365) {
-      return screenSize.width - 50;
-    } else if (screenSize.width < 960) {
+    if (screenSize.width <= SMALL_SCREEN_BREAKPOINT) {
+      return screenSize.width - 100;
+    } else if (screenSize.width <= LARGE_SCREEN_BREAKPOINT) {
       return screenSize.width / 3 - 50;
     } else {
-      return 300;
+      return MAX_GAUGE_WIDTH;
     }
   }, [screenSize]);
 
   const getGaugeHeight = useCallback(() => {
-    if (screenSize.width < 365) {
-      return 200;
-    } else if (screenSize.width < 960) {
-      return screenSize.height / 4;
+    if (screenSize.width <= SMALL_SCREEN_BREAKPOINT) {
+      return screenSize.width - 75;
+    } else if (screenSize.width <= LARGE_SCREEN_BREAKPOINT) {
+      return screenSize.width / 3 - 100;
     } else {
-      return 200;
+      return MAX_GAUGE_HEIGHT;
     }
   }, [screenSize]);
 
@@ -126,10 +134,9 @@ function App() {
   const [gaugeHeight, setGaugeHeight] = useState(getGaugeHeight());
 
   useEffect(() => {
-    console.log(screenSize);
     setGaugeWidth(getGuageWidth());
     setGaugeHeight(getGaugeHeight());
-  }, [screenSize, getGuageWidth, getGuageWidth]);
+  }, [screenSize, getGuageWidth, getGaugeHeight]);
 
   const SensorsContent = (
     <>
@@ -154,7 +161,7 @@ function App() {
             <GaugeTemperature
               value={parseFloat(apiResponse.temperature.toFixed(1))}
               className={`text-${temperatureColour}`}
-              arcColor={"#f15555"}
+              arcColor={"#b2662d"}
               restColor={"#036fb2"}
               inAlarm={isInAlarm(
                 "temperature",
@@ -172,7 +179,7 @@ function App() {
               value={parseInt(apiResponse.humidity.toFixed(0))}
               className={`text-${humidityColour}`}
               arcColor={"#03b2ad"}
-              restColor={"#f15555"}
+              restColor={"#836a2b"}
               inAlarm={isInAlarm("humidity", apiResponse.humidity, COLOUR_MAP)}
               width={gaugeWidth}
               height={gaugeHeight}
