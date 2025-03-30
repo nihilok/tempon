@@ -7,6 +7,7 @@ interface GaugeProps {
   width?: number;
   height?: number;
   className?: string;
+  inAlarm?: boolean;
   arcColor?: string;
   restColor?: string;
   text?: () => string;
@@ -16,30 +17,25 @@ function GaugeBase({
   value,
   min,
   max,
-  width = 100,
-  height = 100,
   className,
+  inAlarm = false,
   arcColor,
   restColor,
   ...gaugeProps
 }: GaugeProps) {
-  const flag = ![min, max].includes(undefined)
-    ? value < (min as number) + 10 || value > (max as number) - 10
-    : false;
+  const flag = inAlarm;
   return (
     <Gauge
       startAngle={-100}
       endAngle={100}
       {...gaugeProps}
-      height={height}
-      width={width}
       value={value}
       valueMin={min}
       valueMax={max}
       className={className}
       sx={(theme) => ({
         [`.${gaugeClasses.valueText}`]: {
-          fontSize: 10,
+          fontSize: 12,
         },
         [`& .${gaugeClasses.valueArc}`]: {
           fill: arcColor ? arcColor : flag ? "#b23702" : "#52b202",

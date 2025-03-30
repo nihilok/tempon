@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner.tsx";
 import { Player } from "./components/VideoPlayer/Player.tsx";
@@ -8,6 +8,7 @@ import {
   GaugeTemperature,
 } from "./components/Gauges/Guages.tsx";
 import { TabLayout } from "./components/Tabs/TabLayout.tsx";
+import { useScreenSize } from "./hooks/useScreenSize.ts";
 
 type Colour = "default" | "red" | "green" | "blue";
 
@@ -31,6 +32,14 @@ const COLOUR_MAP: ColourMap = {
   temperature: { min: 15, max: 26 },
   humidity: { min: 50, max: 90 },
 };
+
+function isInAlarm(valueType: keyof Data, value: number, colourMap: ColourMap) {
+  const thresholds = colourMap[valueType];
+  return (
+    (thresholds.min !== undefined && value < thresholds.min) ||
+    (thresholds.max !== undefined && value > thresholds.max)
+  );
+}
 
 function calculateColour(
   valueType: keyof Data,
@@ -91,6 +100,37 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const screenSize = useScreenSize();
+
+  const getGuageWidth = useCallback(() => {
+    if (screenSize.width < 365) {
+      return screenSize.width - 50;
+    } else if (screenSize.width < 960) {
+      return screenSize.width / 3 - 50;
+    } else {
+      return 300;
+    }
+  }, [screenSize]);
+
+  const getGaugeHeight = useCallback(() => {
+    if (screenSize.width < 365) {
+      return 200;
+    } else if (screenSize.width < 960) {
+      return screenSize.height / 4;
+    } else {
+      return 200;
+    }
+  }, [screenSize]);
+
+  const [gaugeWidth, setGaugeWidth] = useState(getGuageWidth());
+  const [gaugeHeight, setGaugeHeight] = useState(getGaugeHeight());
+
+  useEffect(() => {
+    console.log(screenSize);
+    setGaugeWidth(getGuageWidth());
+    setGaugeHeight(getGaugeHeight());
+  }, [screenSize, getGuageWidth, getGuageWidth]);
+
   const SensorsContent = (
     <>
       {!apiResponse && <LoadingSpinner className={"text-grey"} />}
@@ -103,6 +143,9 @@ function App() {
               className={`text-${pressureColour}`}
               arcColor={"#036fb2"}
               restColor={"#03b2ad"}
+              inAlarm={isInAlarm("pressure", apiResponse.pressure, COLOUR_MAP)}
+              width={gaugeWidth}
+              height={gaugeHeight}
             />
           </p>
           <p className="data-row">
@@ -113,6 +156,13 @@ function App() {
               className={`text-${temperatureColour}`}
               arcColor={"#f15555"}
               restColor={"#036fb2"}
+              inAlarm={isInAlarm(
+                "temperature",
+                apiResponse.temperature,
+                COLOUR_MAP,
+              )}
+              width={gaugeWidth}
+              height={gaugeHeight}
             />
           </p>
           <p className="data-row">
@@ -123,6 +173,9 @@ function App() {
               className={`text-${humidityColour}`}
               arcColor={"#03b2ad"}
               restColor={"#f15555"}
+              inAlarm={isInAlarm("humidity", apiResponse.humidity, COLOUR_MAP)}
+              width={gaugeWidth}
+              height={gaugeHeight}
             />
           </p>
         </div>
