@@ -34,9 +34,6 @@ function GaugeBase({
       valueMax={max}
       className={className}
       sx={(theme) => ({
-        [`.${gaugeClasses.valueText}`]: {
-          fontSize: 12,
-        },
         [`& .${gaugeClasses.valueArc}`]: {
           fill: arcColor ? arcColor : flag ? "#b23702" : "#52b202",
         },

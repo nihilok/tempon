@@ -129,4 +129,5 @@
 .MuiGauge-root {
   width: var(--gauge-width) !important;
   height: var(--gauge-height) !important;
+  font-size: calc(1vw + 1rem);
 }
