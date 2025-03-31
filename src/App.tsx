@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { LoadingSpinner } from "./components/LoadingSpinner/LoadingSpinner.tsx";
 import { Player } from "./components/VideoPlayer/Player.tsx";
@@ -8,7 +8,6 @@ import {
   GaugeTemperature,
 } from "./components/Gauges/Guages.tsx";
 import { TabLayout } from "./components/Tabs/TabLayout.tsx";
-import { useScreenSize } from "./hooks/useScreenSize.ts";
 
 type Colour = "default" | "red" | "green" | "blue";
 
@@ -61,14 +60,6 @@ function calculateColour(
 
 const __DEV__ = import.meta.env.MODE === "development";
 
-const LARGE_SCREEN_BREAKPOINT = 960;
-
-const SMALL_SCREEN_BREAKPOINT = 500;
-
-const MAX_GAUGE_WIDTH = 300;
-
-const MAX_GAUGE_HEIGHT = 200;
-
 function App() {
   const API_URL = __DEV__ ? "http://localhost:8000/api/v3/" : "/api/v3/";
 
@@ -108,36 +99,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const screenSize = useScreenSize();
-
-  const getGuageWidth = useCallback(() => {
-    if (screenSize.width <= SMALL_SCREEN_BREAKPOINT) {
-      return screenSize.width - 100;
-    } else if (screenSize.width <= LARGE_SCREEN_BREAKPOINT) {
-      return screenSize.width / 3 - 50;
-    } else {
-      return MAX_GAUGE_WIDTH;
-    }
-  }, [screenSize]);
-
-  const getGaugeHeight = useCallback(() => {
-    if (screenSize.width <= SMALL_SCREEN_BREAKPOINT) {
-      return screenSize.width - 75;
-    } else if (screenSize.width <= LARGE_SCREEN_BREAKPOINT) {
-      return screenSize.width / 3 - 100;
-    } else {
-      return MAX_GAUGE_HEIGHT;
-    }
-  }, [screenSize]);
-
-  const [gaugeWidth, setGaugeWidth] = useState(getGuageWidth());
-  const [gaugeHeight, setGaugeHeight] = useState(getGaugeHeight());
-
-  useEffect(() => {
-    setGaugeWidth(getGuageWidth());
-    setGaugeHeight(getGaugeHeight());
-  }, [screenSize, getGuageWidth, getGaugeHeight]);
-
   const SensorsContent = (
     <>
       {!apiResponse && <LoadingSpinner className={"text-grey"} />}
@@ -151,8 +112,6 @@ function App() {
               arcColor={"#036fb2"}
               restColor={"#03b2ad"}
               inAlarm={isInAlarm("pressure", apiResponse.pressure, COLOUR_MAP)}
-              width={gaugeWidth}
-              height={gaugeHeight}
             />
           </p>
           <p className="data-row">
@@ -168,8 +127,6 @@ function App() {
                 apiResponse.temperature,
                 COLOUR_MAP,
               )}
-              width={gaugeWidth}
-              height={gaugeHeight}
             />
           </p>
           <p className="data-row">
@@ -181,8 +138,6 @@ function App() {
               arcColor={"#03b2ad"}
               restColor={"#836a2b"}
               inAlarm={isInAlarm("humidity", apiResponse.humidity, COLOUR_MAP)}
-              width={gaugeWidth}
-              height={gaugeHeight}
             />
           </p>
         </div>
